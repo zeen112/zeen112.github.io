@@ -6,13 +6,14 @@ import { flashFirmware } from './flash.js';
 const $ = id => document.getElementById(id);
 const LIMIT = 30000;          // batas byte animasi (sama dengan firmware)
 const MAX_CELLS = 4096;       // sama dengan MAX_CANVAS_CELLS
-const MAX_STRIP_LEN = 256;    // sama dengan MAX_LEDS_PER_STRIP
+const MAX_STRIP_LEN = 300;    // sama dengan MAX_LEDS_PER_STRIP
+const MAX_STRIPS = 8;         // sama dengan MAX_STRIPS di firmware
 const CELL = 20;
 const PAL = ['#ff0000', '#ff8c00', '#00ff00', '#ffffff', '#0078ff', '#000000'];
 const MODE_LABEL = { preset: 'Preset', live: 'Canvas live', file: 'Animasi tersimpan', welcome: 'Welcome', off: 'Mati' };
 
 const S = {
-  W: 16, H: 16, strips: 1, lengths: [256, 0, 0, 0], pattern: 'row_zigzag', reverse: false,
+  W: 16, H: 16, strips: 1, lengths: [256, 0, 0, 0, 0, 0, 0, 0], pattern: 'row_zigzag', reverse: false,
   frames: [], cur: 0, color: [255, 0, 0], tool: 'pen', drawing: false,
   link: null, port: null, dev: {}, presetCount: -1,
   sendT: null, sending: false, dirty: false, brT: null,
@@ -106,7 +107,7 @@ function readLayoutInputs() {
   const changed = w !== S.W || h !== S.H;
   S.W = w; S.H = h;
   S.strips = +$('lStrips').value;
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < MAX_STRIPS; i++) {
     S.lengths[i] = Math.max(0, Math.min(MAX_STRIP_LEN, +$('len' + i).value || 0));
     $('len' + i).disabled = i >= S.strips;
     $('wrapLen' + i).style.opacity = i >= S.strips ? 0.4 : 1;
@@ -124,9 +125,10 @@ function buildLayoutUI() {
   });
   pat.value = S.pattern;
   $('lW').value = S.W; $('lH').value = S.H; $('lStrips').value = S.strips;
-  for (let i = 0; i < 4; i++) $('len' + i).value = S.lengths[i];
+  for (let i = 0; i < MAX_STRIPS; i++) $('len' + i).value = S.lengths[i];
   const onChange = () => { readLayoutInputs(); };
-  ['lW', 'lH', 'lStrips', 'lPattern', 'lReverse', 'len0', 'len1', 'len2', 'len3'].forEach(id => $(id).addEventListener('change', onChange));
+  ['lW', 'lH', 'lStrips', 'lPattern', 'lReverse'].concat([...Array(MAX_STRIPS).keys()].map(i => 'len' + i))
+    .forEach(id => $(id).addEventListener('change', onChange));
   $('applyLayout').onclick = async () => { readLayoutInputs(); await sendLayout(); };
 }
 

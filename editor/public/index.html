@@ -22,26 +22,27 @@
     <label>Lebar kanvas (dot) <input type="number" id="lW" min="1" max="64" value="16"></label>
     <label>Tinggi kanvas (dot) <input type="number" id="lH" min="1" max="64" value="16"></label>
     <label>Jumlah strip
-      <select id="lStrips">
-        <option value="1">1</option><option value="2">2</option>
-        <option value="3">3</option><option value="4">4</option>
-      </select>
+      <select id="lStrips"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select>
     </label>
     <label>Susunan
       <select id="lPattern"></select>
     </label>
   </div>
   <div class="grid4" style="margin-top:10px">
-    <label id="wrapLen0">Strip 1 (LED) <input type="number" id="len0" min="1" max="256" value="256"></label>
-    <label id="wrapLen1">Strip 2 (LED) <input type="number" id="len1" min="1" max="256" value="0"></label>
-    <label id="wrapLen2">Strip 3 (LED) <input type="number" id="len2" min="1" max="256" value="0"></label>
-    <label id="wrapLen3">Strip 4 (LED) <input type="number" id="len3" min="1" max="256" value="0"></label>
+    <label id="wrapLen0">Strip 1 (LED) <input type="number" id="len0" min="0" max="256" value="256"></label>
+    <label id="wrapLen1">Strip 2 (LED) <input type="number" id="len1" min="0" max="256" value="0"></label>
+    <label id="wrapLen2">Strip 3 (LED) <input type="number" id="len2" min="0" max="256" value="0"></label>
+    <label id="wrapLen3">Strip 4 (LED) <input type="number" id="len3" min="0" max="256" value="0"></label>
+    <label id="wrapLen4">Strip 5 (LED) <input type="number" id="len4" min="0" max="256" value="0"></label>
+    <label id="wrapLen5">Strip 6 (LED) <input type="number" id="len5" min="0" max="256" value="0"></label>
+    <label id="wrapLen6">Strip 7 (LED) <input type="number" id="len6" min="0" max="256" value="0"></label>
+    <label id="wrapLen7">Strip 8 (LED) <input type="number" id="len7" min="0" max="256" value="0"></label>
   </div>
   <label class="check" style="margin-top:10px"><input type="checkbox" id="lReverse"> Balik arah urutan LED</label>
   <div class="row" style="margin-top:12px">
     <button id="applyLayout" class="primary">Terapkan layout ke LED</button>
   </div>
-  <p class="hint">Setiap strip ada di pin tetap firmware (16, 17, 18, 19). Panjang dan susunan bisa diubah kapan saja di sini.</p>
+  <p class="hint">Strip dihubungkan ke pin GPIO yang sudah ditetapkan di firmware (config.h). Panjang dan susunan bisa diubah kapan saja di sini.</p>
 </section>
 
 <section class="card">

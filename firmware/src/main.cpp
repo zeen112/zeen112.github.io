@@ -45,7 +45,7 @@ CRGB stripBuf[MAX_STRIPS][MAX_LEDS_PER_STRIP];
 
 uint16_t layoutW = 16, layoutH = 16;
 uint8_t stripCount = 1;
-uint16_t stripLen[MAX_STRIPS] = {256, 0, 0, 0};
+uint16_t stripLen[MAX_STRIPS] = {256};
 std::vector<uint16_t> chainMap;      // urutan LED (berurutan antar strip) -> indeks kanvas
 std::vector<uint8_t> canvas;         // kanvas RGB, W*H*3
 
@@ -177,7 +177,7 @@ bool applyLayout(const uint8_t* p, size_t n, bool save) {
   if (ns == 0 || ns > MAX_STRIPS) return false;
   size_t pos = 5;
   if (n < pos + ns * 2) return false;
-  uint16_t lens[MAX_STRIPS] = {0, 0, 0, 0};
+  uint16_t lens[MAX_STRIPS] = {0};
   uint32_t total = 0;
   for (uint8_t i = 0; i < ns; i++) {
     lens[i] = p[pos] | (p[pos + 1] << 8);
@@ -675,8 +675,13 @@ void setupHttp() {
 }
 
 /* ---------------- setup & loop ---------------- */
+// Satu controller FastLED per pin. Pin harus konstanta waktu compile (dari config.h).
+template <int PIN>
+void addStrip(CRGB* buf) {
+  FastLED.addLeds<LED_CHIPSET, PIN, COLOR_ORDER>(buf, MAX_LEDS_PER_STRIP);
+}
+
 void setup() {
-  Serial.setRxBufferSize(65536);
   Serial.begin(SERIAL_BAUD);
   bootGuard();
 
@@ -685,10 +690,14 @@ void setup() {
   loadLayout();
   loadSettings();
 
-  FastLED.addLeds<LED_CHIPSET, STRIP_PIN_0, COLOR_ORDER>(stripBuf[0], MAX_LEDS_PER_STRIP);
-  FastLED.addLeds<LED_CHIPSET, STRIP_PIN_1, COLOR_ORDER>(stripBuf[1], MAX_LEDS_PER_STRIP);
-  FastLED.addLeds<LED_CHIPSET, STRIP_PIN_2, COLOR_ORDER>(stripBuf[2], MAX_LEDS_PER_STRIP);
-  FastLED.addLeds<LED_CHIPSET, STRIP_PIN_3, COLOR_ORDER>(stripBuf[3], MAX_LEDS_PER_STRIP);
+  addStrip<STRIP_PIN_0>(stripBuf[0]);
+  addStrip<STRIP_PIN_1>(stripBuf[1]);
+  addStrip<STRIP_PIN_2>(stripBuf[2]);
+  addStrip<STRIP_PIN_3>(stripBuf[3]);
+  addStrip<STRIP_PIN_4>(stripBuf[4]);
+  addStrip<STRIP_PIN_5>(stripBuf[5]);
+  addStrip<STRIP_PIN_6>(stripBuf[6]);
+  addStrip<STRIP_PIN_7>(stripBuf[7]);
   FastLED.setMaxPowerInVoltsAndMilliamps(5, MAX_MILLIAMPS);
   applyBrightness();
   for (int s = 0; s < MAX_STRIPS; s++) fill_solid(stripBuf[s], MAX_LEDS_PER_STRIP, CRGB::Black);

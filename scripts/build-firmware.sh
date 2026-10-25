@@ -5,7 +5,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 FW="$ROOT/firmware"
 OUT="$ROOT/editor/public/firmware"
-ENV=esp32dev
+ENV=esp32c3
 BUILD="$FW/.pio/build/$ENV"
 
 pio run -d "$FW" -e "$ENV"

@@ -1,13 +1,14 @@
 // Flash firmware ESP32 langsung dari browser memakai esptool-js (Web Serial).
 // Urutan file mengikuti tata letak default PlatformIO/Arduino ESP32:
-//   bootloader.bin @0x1000, partitions.bin @0x8000, boot_app0.bin @0xe000, firmware.bin @0x10000
+//   ESP32-C3: bootloader.bin @0x0, partitions.bin @0x8000, boot_app0.bin @0xe000, firmware.bin @0x10000
+//   (ESP32 klasik: bootloader @0x1000)
 
 // PERLU DIVERIFIKASI: versi esptool-js. Ganti URL ini ke versi yang sudah ada di npm
 // (lihat https://www.npmjs.com/package/esptool-js) dan pastikan modul ESM-nya bisa di-import.
 export const ESPTOOL_URL = 'https://cdn.jsdelivr.net/npm/esptool-js@0.4.3/bundle.js';
 
 const PARTS = [
-  ['bootloader.bin', 0x1000],
+  ['bootloader.bin', 0x0],
   ['partitions.bin', 0x8000],
   ['boot_app0.bin', 0xe000],
   ['firmware.bin', 0x10000],
