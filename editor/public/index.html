@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StopLamp Editor</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>StopLamp Editor</h1>
+  <div id="status"><span class="dot" id="dot"></span><span id="stxt">Belum terhubung</span></div>
+  <p class="hint">Gunakan Chrome atau Edge di desktop, lalu sambungkan ESP32 dengan kabel USB.</p>
+  <div class="row">
+    <button id="connBtn" class="primary">Hubungkan</button>
+  </div>
+</header>
+
+<section class="card">
+  <h2>1. Layout strip</h2>
+  <div class="grid2">
+    <label>Lebar kanvas (dot) <input type="number" id="lW" min="1" max="64" value="16"></label>
+    <label>Tinggi kanvas (dot) <input type="number" id="lH" min="1" max="64" value="16"></label>
+    <label>Jumlah strip
+      <select id="lStrips">
+        <option value="1">1</option><option value="2">2</option>
+        <option value="3">3</option><option value="4">4</option>
+      </select>
+    </label>
+    <label>Susunan
+      <select id="lPattern"></select>
+    </label>
+  </div>
+  <div class="grid4" style="margin-top:10px">
+    <label id="wrapLen0">Strip 1 (LED) <input type="number" id="len0" min="1" max="256" value="256"></label>
+    <label id="wrapLen1">Strip 2 (LED) <input type="number" id="len1" min="1" max="256" value="0"></label>
+    <label id="wrapLen2">Strip 3 (LED) <input type="number" id="len2" min="1" max="256" value="0"></label>
+    <label id="wrapLen3">Strip 4 (LED) <input type="number" id="len3" min="1" max="256" value="0"></label>
+  </div>
+  <label class="check" style="margin-top:10px"><input type="checkbox" id="lReverse"> Balik arah urutan LED</label>
+  <div class="row" style="margin-top:12px">
+    <button id="applyLayout" class="primary">Terapkan layout ke LED</button>
+  </div>
+  <p class="hint">Setiap strip ada di pin tetap firmware (16, 17, 18, 19). Panjang dan susunan bisa diubah kapan saja di sini.</p>
+</section>
+
+<section class="card">
+  <h2>2. Mode & kecerahan</h2>
+  <div class="row">
+    <button id="bPreset">Preset</button>
+    <button id="bLive">Canvas (live)</button>
+    <button id="bWelcome">Welcome</button>
+    <button id="bOff">Matikan</button>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <label for="bright">Kecerahan</label>
+    <input type="range" id="bright" min="5" max="255" value="120">
+  </div>
+  <div class="row" style="margin-top:10px">
+    <select id="presetSel" style="flex:1"></select>
+    <button id="bPlayPreset">Jalankan preset</button>
+  </div>
+</section>
+
+<section class="card">
+  <h2>3. Canvas animasi</h2>
+  <div class="row">
+    <button id="toolPen" class="on">Pensil</button>
+    <button id="toolErase">Penghapus</button>
+    <input type="color" id="pickColor" value="#ff0000" title="Warna bebas">
+    <div class="row" id="swatches"></div>
+  </div>
+  <canvas id="grid" width="320" height="320"></canvas>
+
+  <div class="row" style="margin-top:10px">
+    <button id="prevF">◀</button>
+    <span id="fIdx">1/1</span>
+    <button id="nextF">▶</button>
+    <button id="addF">+ Frame</button>
+    <button id="dupF">Duplikat</button>
+    <button id="delF">Hapus frame</button>
+    <button id="clrF">Kosongkan</button>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <label for="fps">FPS</label>
+    <input type="range" id="fps" min="1" max="30" value="8">
+    <span id="fpsV">8</span>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <button id="bPlay">▶ Putar preview</button>
+    <label class="check"><input type="checkbox" id="liveChk" checked> Kirim ke LED realtime</label>
+  </div>
+  <p class="hint" id="frameInfo"></p>
+
+  <h2 style="margin-top:14px">Preview</h2>
+  <canvas id="preview" width="320" height="320"></canvas>
+
+  <div class="row" style="margin-top:12px">
+    <input type="text" id="name" placeholder="nama animasi" maxlength="24" style="flex:1">
+    <button id="bSave">Simpan ke perangkat</button>
+  </div>
+  <div id="msg"></div>
+</section>
+
+<section class="card">
+  <h2>4. Animasi tersimpan di perangkat</h2>
+  <div id="fileList"></div>
+  <div class="row" style="margin-top:10px"><button id="refreshList">Muat ulang daftar</button></div>
+</section>
+
+<section class="card">
+  <h2>5. Flash firmware</h2>
+  <p class="hint">Dipakai untuk pemasangan pertama atau update firmware via USB. Update lewat WiFi tersedia di halaman perangkat (http://192.168.4.1 saat tersambung ke WiFi StopLamp-XXXX).</p>
+  <div class="row"><button id="flashBtn">Flash firmware via USB</button></div>
+  <div class="bar" style="margin-top:10px"><div id="flashBar"></div></div>
+  <div id="flashTxt" class="hint"></div>
+  <pre id="flashLog"></pre>
+</section>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
